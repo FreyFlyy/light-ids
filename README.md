@@ -112,6 +112,7 @@ A web interface for real-time monitoring and administrative control with dual th
 ## Performance
 
 **Memory usage** typically starts at **~220MB** in idle conditions, and steadily increases to **~330MB** over time and extreme traffic (e.g., sustained flooding or high-rate scanning scenarios approaching `MAX_PACKET_BUFFER` limits).
+
 **CPU usage** remains low in idle normal traffic conditions (**<1% CPU** load) but can increase to **2.5 - 5.0%** while using the web UI
 
 Measurements were taken on a **Raspberry Pi 5 (8GB RAM)** in a domestic environment with **10–12 active devices** and a **20Mbps** domestic network.

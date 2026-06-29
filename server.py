@@ -722,7 +722,7 @@ def analyze_traffic(new_packets):
         w["std_current"] = round(std_val, 4) if std_val is not None else None
     
         # RST/SYN ratio
-        if rst_ratio > w["max_rst_ratio"] and rst_count >= MIN_RST_COUNT:
+        if rst_ratio > w["max_rst_ratio"] and rst_count >= MIN_RST_COUNT and syn_count >= MIN_SYN_COUNT:
             w["max_rst_ratio"] = round(rst_ratio, 2)
             w["rst_count"] = rst_count
             w["syn_count_rstsyn"] = syn_count

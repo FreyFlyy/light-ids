@@ -594,7 +594,7 @@ def analyze_traffic(new_packets):
             s["mean_intervals"] = round(statistics.mean(intervals), 4) if intervals else None
         
         # RST/SYN ratio
-        if round(rst_ratio, 2) > s["max_rst_ratio"] and rst_count >= MIN_RST_COUNT:
+        if round(rst_ratio, 2) > s["max_rst_ratio"]:
             s["max_rst_ratio"] = round(rst_ratio, 2)
             s["rst_count"] = rst_count
             s["syn_count_rstsyn"] = syn_count
@@ -610,7 +610,7 @@ def analyze_traffic(new_packets):
             reasons.append("Port scan")
         if s.get("min_std") and s["min_std"] < MAX_STD_INTERVALS:
             reasons.append("Regular intervals")
-        if (s["rst_count"] >= MIN_RST_COUNT and s["max_rst_ratio"] >= RST_RATIO_THRESHOLD): # only if we have at least a minimum number of RST packets
+        if (s["rst_count"] >= MIN_RST_COUNT and s["max_rst_ratio"] >= RST_RATIO_THRESHOLD and s.get("max_syn_count", 0) >= MIN_SYN_COUNT): # only if we have at least a minimum number of RST packets
             reasons.append("Connection probing")
 
         score = sum(PENALTIES[r] for r in reasons if r in PENALTIES)

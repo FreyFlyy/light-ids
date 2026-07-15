@@ -145,7 +145,7 @@ This system is not production-hardened: it is built for *trusted domestic enviro
 
 ### Linux
 
-* **Prerequisites**: **Python 3.x** (*3.8 is the minimum requirement, but >=3.10 is recommended for improved performance and long-term support*), **JavaScript (ES6+)**
+* **Prerequisites**: Python 3.x (*3.8 minimum, >=3.10 recommended*), `tshark`, and a modern web browser with JavaScript enabled.
 
 1.  **Clone the repository:**
     ```bash
@@ -211,6 +211,61 @@ This system is not production-hardened: it is built for *trusted domestic enviro
     ```
 
     See the web dashboard guide in `DASHBOARD.md`
+
+#### Running as a systemd service *(recommended)*
+
+1.  **Create a new systemd unit:**
+    ```bash
+    sudo nano /etc/systemd/system/lightids.service
+    ```
+
+2.  **Add the following configuration:**
+    ```ini
+    [Unit]
+    Description=LightIDS Intrusion Detection System
+    After=network-online.target
+    Wants=network-online.target
+
+    [Service]
+    Type=simple
+
+    User=<YOUR_USERNAME>
+    SupplementaryGroups=wireshark
+
+    WorkingDirectory=/path/to/light-ids
+    ExecStart=/path/to/light-ids/THISVENV/bin/python server.py
+
+    Restart=on-failure
+    RestartSec=5
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+    Replacing `User`, `WorkingDirectory` and `ExecStart` accordingly.
+
+3.  **Reload, enable and start the service:**
+    ```bash
+    sudo systemctl daemon-reload
+
+    sudo systemctl enable lightids
+
+    sudo systemctl start lightids
+    ```
+
+4.  **Manage the service:**
+    ```bash
+    systemctl status lightids        # check status
+
+    sudo systemctl start lightids     # start service
+    sudo systemctl stop lightids      # stop service
+    sudo systemctl restart lightids   # restart service
+
+    sudo systemctl enable lightids    # start automatically at boot
+    sudo systemctl disable lightids   # disable automatic startup
+
+    journalctl -u lightids -f         # check logs
+    ```
 
 ## Screenshots (dark theme)
 
